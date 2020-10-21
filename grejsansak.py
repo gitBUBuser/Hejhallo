@@ -72,35 +72,3 @@ def IsCorrect(response, answer):
 
 if __name__ == "__main__":
     main()
-
-
-    for key, values in responseTimes.items():
-        x = []
-        y = []
-
-        for i in range(len(values)):
-            if(values[i] == "N/A"):
-                y.append(np.nan)
-            else:
-                y.append(int(values[i]))
-            x.append(i)
-        plt.plot(x, y, label = key)
-        plt.legend(loc='best')
-    plt.show()
-    plt.savefig("obunga.png")
-
-
-def AnswerClassification(opinion, answer):
-    
-    if opinion == "[b]" and answer == "[b]":
-        return "tp"
-    elif opinion == "[b]" and answer == "[n]":
-        return "fp"
-    elif opinion == "[n]" and answer == "[n]":
-        return "tn"
-    elif opinion == "[n]" and answer == "[b]":
-        return "fn"
-
-
-if __name__ == "__main__":
-    main()
