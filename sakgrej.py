@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import json
 import sys
 import numpy as np
@@ -14,9 +16,7 @@ def main():
     subjectAnswers = data.get("subject answer")
 
     completeResponseTimes = ClassifyAll(responseTimes, subjectAnswers, expectedAnswers)
-    DrawAllLines(completeResponseTimes)
-
-    
+    DrawAllLines(completeResponseTimes)    
 
 def LoadFile(path):
     file = open(path)
@@ -43,13 +43,11 @@ def ClassifyAll(responseTime, subjectAnswer, expectedAnswer):
 
 def DrawAllLines(responseTimes):
     plt.figure()
-    
     index = 0
 
     for key, values in responseTimes.items():
         x = []
         y = []
-
         for i in range(len(values)):
             if(values[i] == "N/A"):
                 y.append(np.nan)
