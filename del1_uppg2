@@ -1,0 +1,21 @@
+from tkinter import *
+
+root = Tk()
+root.geometry("500x200")
+frame = Frame(root, width=500, height=200)
+
+frame.pack()
+comment_label = Label(frame, text="Kommentar")
+comment_label.grid(row=0, column=0)
+
+comment_entry = Entry(frame)
+comment_entry.grid(row=0, column=1, columnspan=3, sticky=W)
+
+
+avbryt_button = Button(frame, text="Avbryt")
+avbryt_button.grid(row=1, column=2, sticky=E)
+
+skicka_button = Button(frame, text="Skicka")
+skicka_button.grid(row=1, column=3, sticky=E)
+
+frame.mainloop()
