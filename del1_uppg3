@@ -1,0 +1,61 @@
+from tkinter import *
+
+root = Tk()
+
+
+
+radio_value = StringVar()
+radio_value.set("")
+
+# skapa en instans av IntVar som får namnet "check1"
+check_val1 = StringVar()
+
+# skapa en instans av IntVar som får namnet "check2"
+check_val2 = StringVar()
+
+check_val3 = StringVar()
+
+
+
+def show_results():
+    window = Toplevel(root)
+    text = Text(window, width=25, height=10)
+    text.insert(END, f"{entry.get()}\n{radio_value.get()}\n{check_val1.get()}\n{check_val2.get()}\n{check_val3.get()}")
+    text.pack()
+
+
+entry = Entry(root)
+entry.pack()
+
+# knapp 1
+radio_button1 = Radiobutton(root, text="Gurka", variable=radio_value,
+                               value="gurka")
+radio_button1.pack()
+
+# knapp 2
+radio_button2 = Radiobutton(root, text="Tomat", variable=radio_value,
+                               value="tomat")
+radio_button2.pack()
+
+# knapp 3
+radio_button3 = Radiobutton(root, text="Oliv", variable=radio_value,
+                               value="oliv")
+radio_button3.pack()
+
+
+check_button1 = Checkbutton(root, variable=check_val1, onvalue="ett", offvalue="",
+                              text="ett")
+
+check_button2 = Checkbutton(root, variable=check_val2, onvalue="två", offvalue="",
+                              text="två")
+
+check_button3 = Checkbutton(root, variable=check_val3, onvalue="tre", offvalue="",
+                              text="tre")
+check_button1.pack()
+check_button2.pack()
+check_button3.pack()
+
+show_button = Button(text="Visa!", command=show_results)
+show_button.pack()
+
+root.mainloop()
