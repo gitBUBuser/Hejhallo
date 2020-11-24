@@ -1,0 +1,12 @@
+from tkinter import *
+
+
+def button_pressed():
+    print("Knappen funkar!!")
+
+
+root = Tk()
+button = Button(root, text="Testa mig!!", command=button_pressed)
+button.pack()
+
+root.mainloop()
