@@ -9,58 +9,89 @@ argument när en instans av tema5.LayoutTester skapas.
 import tema5
 import random
 
-def colum_layout(squares, frame_height, frame_width, start_left, start_top):
-    margin_x = 10
-    margin_y = 10
-    current_x = margin_x
-    current_y = margin_y
-    largest_square_width = 0
 
+def largest_square_width(squares):
+    """
+    Hittar kvadraten med högsta bredd i listan squares och
+    returnenrar bredden.
+    """
+    largest_square_width = 0
     for square in squares:
         if square.winfo_width() > largest_square_width:
             largest_square_width = square.winfo_width()
+    return largest_square_width
 
 
-    for square in squares:
-        padding = (largest_square_width - square.winfo_width()) / 2
-
-
-        if current_y + (largest_square_width/2) + margin_y > frame_height:
-            current_x += margin_x + (largest_square_width)
-            current_y = margin_y
-        
-        print(str(current_y) + "  |  " + str(frame_height))
-
-        if current_x + (largest_square_width / 2) + margin_x < frame_width:
-           # print(f"current-x: {current_x} frame_width: {frame_width}")
-            square.place(x=current_x + padding, y=current_y + padding)
-        else:
-            break
-        current_y += (margin_y + (largest_square_width))
-
-def random_layout(squares, frame_height, frame_width, start_left, start_top):
-    """Placera ut kvadraterna i listan squares slumpmässigt.
-
-    Argument:
-    squares      -- Lista som innehåller tkinter.Label-objekt
-    frame_height -- Höjden (int) på den Frame som kvadraterna ligger i
-    frame_width  -- Bredden (int) på den Frame som kvadraterna ligger i
-    start_left   -- Värdet True betyder att kvadraterna ska placeras ut
-                    från vänster sida. Värdet False betyder att
-                    kvadraterna ska placeras ut från höger.
-    start_top    -- Värdet True betyder att kvadraterna ska börja placeras ut
-                    uppifrån. Värdet False anger att kvadraterna ska börja
-                    placeras ut från botten.
+def add_to_x(start_left, margin_x, lsw):
     """
-    # Slumpa ut positioner för alla kvadrater utan att de hamnar utanför framen
+    Returnerar ett värde som läggs till på x
+    kordinaten för att skapa nästa kolumn.
+    """
+    if start_left:
+        return margin_x + lsw
+    return -(margin_x + lsw)
+
+
+def add_to_y(start_top, margin_y, lsw):
+    """
+    Returnerar ett värde som läggs till på y
+    för bestämma nästa plats i kolumnen.
+    """
+    if start_top:
+        return margin_y + lsw
+    return - (margin_y + lsw)
+
+
+def column_layout(squares, frame_height, frame_width, start_left, start_top):
+    """Placera ut kvadraterna i listan squares som kolumner."""
+    margin_x = 10
+    margin_y = 10
+    lsw = largest_square_width(squares)
+    # Om start_left är sant så placeras första kvadraten till vänster i
+    # fönstret, annars placeras den till höger
+    if start_left:
+        current_x = margin_x
+    else:
+        current_x = frame_width - margin_x - lsw
+
+    # Om start_top är sant placeras första kvadraten i toppen av fönstret,
+    # annars placeras den vid botten
+    if start_top:
+        current_y = margin_y
+    else:
+        current_y = frame_height - margin_y - lsw
+
+    # Placerar ut alla kvadrater i squares vid dess rätta positioner i kolumner
     for square in squares:
-        square_size = square.winfo_width()
-        xpos = random.randint(0, frame_width - square_size)
-        ypos = random.randint(0, frame_height - square_size)
-        square.place(x=xpos, y=ypos)
+        padding = (lsw - square.winfo_width()) / 2
+
+        # Kollar om kolumnen fyller hela fönstret och
+        # skapar en ny kolumn om den gör det
+        if start_top:
+            if current_y + lsw + margin_y > frame_height:
+                current_y = margin_y
+                current_x += add_to_x(start_left, margin_x, lsw)
+        else:
+            if current_y - margin_y < 0:
+                current_y = frame_height - margin_y - lsw
+                current_x += add_to_x(start_left, margin_x, lsw)
+
+        # Placerar ut kvadraten om den inte kommer utanför rutan
+        if start_left:
+            if current_x + lsw + margin_x < frame_width:
+                square.place(x=current_x + padding, y=current_y + padding)
+            else:
+                break
+        else:
+            if current_x - margin_x > 0:
+                square.place(x=current_x + padding, y=current_y + padding)
+            else:
+                break
+
+        current_y += add_to_y(start_top, margin_y, lsw)
 
 
 if __name__ == "__main__":
-    # layoutfunktionen som anropas av knappen "Kör layoutfunktion" skickas med som
-    # ett funktionsobjekt när vi skapar en instans av LayoutTester (GUI:t)
-    layout_tester = tema5.LayoutTester(colum_layout)
+    # layoutfunktionen som anropas av knappen "Kör layoutfunktion" skickas med
+    # som ett funktionsobjekt när vi skapar en instans av LayoutTester (GUI:t)
+    layout_tester = tema5.LayoutTester(column_layout)
